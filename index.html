@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday! 💖</title>
+    <style>
+        /* CSS Style Included directly or separated */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0d0c1d;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #ffffff;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #particleCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .container {
+            text-align: center;
+            z-index: 2;
+            position: relative;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        /* Pages setup */
+        .page {
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Typography & Animations */
+        h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(45deg, #ff007f, #7f00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            color: #00ffff;
+            margin-bottom: 20px;
+        }
+
+        .instruction {
+            font-size: 0.95rem;
+            color: #aaaaaa;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        button {
+            padding: 12px 35px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(45deg, #7f00ff, #ff007f);
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.5);
+            transition: 0.3s;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        /* Cake Page Styles */
+        .cake-area {
+            position: relative;
+            margin: 40px auto;
+            width: 180px;
+            height: 180px;
+        }
+
+        #cakeImg {
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+
+        #flame {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2.5rem;
+            z-index: 10;
+            animation: flicker 0.1s infinite alternate;
+        }
+
+        .hidden-flame {
+            display: none;
+        }
+
+        .matchstick-container {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        #matchstick {
+            font-size: 3.5rem;
+            cursor: grab;
+            user-select: none;
+            touch-action: none;
+            display: inline-block;
+            transition: transform 0.1s;
+        }
+
+        /* Menu Page Styles */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .menu-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: none;
+            border-radius: 15px;
+            padding: 15px;
+            font-size: 1.1rem;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .menu-btn:hover, .menu-btn:active {
+            background: linear-gradient(45deg, rgba(127, 0, 255, 0.3), rgba(255, 0, 127, 0.3));
+            border-color: #ff007f;
+        }
+
+        /* Content Sections inside Menu */
+        .content-box {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .gallery-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+        }
+
+        @keyframes flicker {
+            from { transform: translateX(-50%) scale(1); }
+            to { transform: translateX(-50%) scale(1.1); opacity: 0.9; }
+        }
+
+        .fade-in { animation: fadeIn 1.5s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="particleCanvas"></canvas>
+
+    <div class="container">
+        <!-- PAGE 1: Welcome -->
+        <div id="page1" class="page fade-in">
+            <h1>Happy Birthday</h1>
+            <h2>ချစ်ကောင်မလေးရေ 💖</h2>
+            <p class="instruction">မွေးနေ့ရှင်အတွက် သီးသန့်လုပ်ပေးထားတဲ့ စာမျက်နှာလေးဖြစ်ပါတယ်။ ဆက်ကြည့်ဖို့ အောက်ကခလုတ်ကို နှိပ်လိုက်ပါ!</p>
+            <button onclick="goToPage(2)">NEXT ➜</button>
+        </div>
+
+        <!-- PAGE 2: Cake Lighting -->
+        <div id="page2" class="page hidden">
+            <h2 id="cakeTitle">ဖယောင်းတိုင်မီးထွန်းပေးပါ 🎂</h2>
+            <p class="instruction" id="cakeHint">အောက်က မီးခြစ်တံ (🪄) ကို လက်နဲ့ဖိဆွဲပြီး ကိတ်မုန့်ပေါ်က ဖယောင်းတိုင်ဆီ သယ်သွားပေးပါ။</p>
+            
+            <div class="cake-area">
+                <div id="flame" class="hidden-flame">🔥</div>
+                <img src="https://cdn-icons-png.flaticon.com/512/3165/3165213.png" id="cakeImg" alt="Cake">
+            </div>
+
+            <div class="matchstick-container">
+                <div id="matchstick">🪄</div>
+            </div>
+            
+            <button id="afterCakeBtn" class="hidden" onclick="goToPage(3)" style="margin-top: 20px;">ရှေ့ဆက်သွားရန် ➜</button>
+        </div>
+
+        <!-- PAGE 3: Main Menu Chapters -->
+        <div id="page3" class="page hidden">
+            <h2>Chapters ✨</h2>
+            <p class="instruction">ကြည့်ချင်တဲ့ အခန်းကဏ္ဍတစ်ခုချင်းစီကို နှိပ်ပြီး ဖတ်ရှုနိုင်ပါတယ်...</p>
+            
+            <div class="menu-grid">
+                <button class="menu-btn" onclick="showSubContent('melody')">🎵 <span>Open This First (Soul Melody)</span></button>
+                <button class="menu-btn" onclick="showSubContent('memory')">📸 <span>Magic Book (Memory Archive)</span></button>
+                <button class="menu-btn" onclick="showSubContent('letter')">✉️ <span>Just For You (Heartfelt Letter)</span></button>
+            </div>
+
+            <!-- Sub Content Box Display -->
+            <div id="contentDisplay" class="content-box hidden">
+                <div id="content-melody" class="hidden">
+                    <h3>Soul Melody 🎶</h3>
+                    <p style="margin-top: 10px; font-size: 0.95rem; color: #ddd;">
+                        https://youtu.be/7t4QiqIiqls?si=gBxBpXdsYLOEznoF<br><br>
+                        " ဖူးရှိတဲ့ကမ္ဘာမြေဟာကိုယ်အတွက်တော့အလှပဆုံးအရာပါပဲ❤️..."
+                    </p>
+                </div>
+                
+                <div id="content-memory" class="hidden">
+                    <h3>Memory Archive 📸</h3>
+                    <p style="font-size: 0.85rem; color: #aaa; margin-bottom: 10px;">(သင့်ရဲ့ အမှတ်တရပုံလေးတွေကို ဒီနေရာမှာ အစားထိုးနိုင်ပါတယ်)</p>
+                    <div class="gallery-grid">
+                        <div class="gallery-item">🥰</div>
+                        <div class="gallery-item">👩‍❤️‍👨</div>
+                        <div class="gallery-item">🍕</div>
+                        <div class="gallery-item">🎉</div>
+                    </div>
+                </div>
+
+                <div id="content-letter" class="hidden">
+                    <h3>Heartfelt Letter ✉️</h3>
+                    <p style="margin-top: 10px; font-size: 0.95rem; text-align: left; line-height: 1.6; color: #ffe6ee;">
+                        ချစ်ရတဲ့ မွေးနေ့ရှင်လေးရေ... <br>
+                        ဒီနေ့ကျရောက်တဲ့ မွေးနေ့ကစပြီး နောင်နှစ်ပေါင်းများစွာတိုင် ပျော်ရွှင်ချမ်းမြေ့ပါစေ။ ဘေးနားမှာ အမြဲတမ်းရှိနေပေးမှာမို့လို့ စိတ်ချမ်းသာကိုယ်ကျန်းမာနဲ့ လိုအင်ဆန္ဒတွေ ပြည့်ဝပါစေကြောင်း ဆုတောင်းပေးလိုက်ပါတယ်သဲငယ်လေး💖
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Page Navigation
+        function goToPage(pageNum) {
+            document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+            document.getElementById('page' + pageNum).classList.remove('hidden');
+            if(pageNum === 2) {
+                setupTouchDrag();
+            }
+        }
+
+        // Submenus inside Page 3
+        function showSubContent(type) {
+            document.getElementById('contentDisplay').classList.remove('hidden');
+            ['melody', 'memory', 'letter'].forEach(t => {
+                document.getElementById('content-' + t).classList.add('hidden');
+            });
+            document.getElementById('content-' + type).classList.remove('hidden');
+        }
+
+        // Drag and Drop Logic for Mobile & Desktop
+        function setupTouchDrag() {
+            const matchstick = document.getElementById("matchstick");
+            const flame = document.getElementById("flame");
+            const cakeImg = document.getElementById("cakeImg");
+            const cakeTitle = document.getElementById("cakeTitle");
+            const cakeHint = document.getElementById("cakeHint");
+            const afterCakeBtn = document.getElementById("afterCakeBtn");
+
+            let isDragging = false;
+
+            // Handle touch for Mobile Devices
+            matchstick.addEventListener("touchmove", function(e) {
+                let touch = e.touches[0];
+                matchstick.style.position = 'fixed';
+                matchstick.style.left = touch.clientX - 25 + 'px';
+                matchstick.style.top = touch.clientY - 25 + 'px';
+
+                let cakeRect = cakeImg.getBoundingClientRect();
+                if (touch.clientX >= cakeRect.left && touch.clientX <= cakeRect.right &&
+                    touch.clientY >= cakeRect.top && touch.clientY <= cakeRect.bottom) {
+                    
+                    igniteCake();
+                }
+            });
+
+            // Fallback for Desktop Mouse Drag
+            matchstick.addEventListener("mousedown", () => isDragging = true);
+            document.addEventListener("mousemove", (e) => {
+                if (!isDragging) return;
+                matchstick.style.position = 'fixed';
+                matchstick.style.left = e.clientX - 25 + 'px';
+                matchstick.style.top = e.clientY - 25 + 'px';
+
+                let cakeRect = cakeImg.getBoundingClientRect();
+                if (e.clientX >= cakeRect.left && e.clientX <= cakeRect.right &&
+                    e.clientY >= cakeRect.top && e.clientY <= cakeRect.bottom) {
+                    igniteCake();
+                }
+            });
+            document.addEventListener("mouseup", () => isDragging = false);
+
+            function igniteCake() {
+                flame.classList.remove("hidden-flame");
+                cakeTitle.innerText = "Happy Birthday ပါ ချစ်ရေ! 🎉🎂";
+                cakeHint.innerText = "ဖယောင်းတိုင်မီးလေး လင်းသွားပါပြီ!";
+                matchstick.style.display = "none";
+                afterCakeBtn.classList.remove("hidden");
+                isDragging = false;
+            }
+        }
+
+        // Particle Background Animation
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        let particlesArray = [];
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedY = Math.random() * 0.8 + 0.3;
+                this.color = `hsl(${Math.random() * 360}, 100%, 75%)`;
+            }
+            update() {
+                this.y += this.speedY;
+                if (this.y > canvas.height) {
+                    this.y = 0;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function init() {
+            for (let i = 0; i < 40; i++) { particlesArray.push(new Particle()); }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+            }
+            requestAnimationFrame(animate);
+        }
+        init();
+        animate();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
